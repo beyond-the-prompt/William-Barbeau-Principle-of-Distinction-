@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Principle of Distinction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070a1c;--ink:#e9edff;--mute:#9aa3c7;--line:#252c52;--panel:#0f1330;
+--c1:#7fe3d4;--c2:#9b8cff;--c3:#ffb454;--c4:#ff7aa8;--c5:#8fd16a;color-scheme:dark;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#070a1c}}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f3f4fb;--ink:#12163a;--mute:#4d557d;--line:#cfd3ec;--panel:#fff;--c1:#0f8f80;--c2:#5a49d6;--c3:#b36a00;--c4:#c42f68;--c5:#4a8a23;color-scheme:light}}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.05rem/1.65 "Hanken Grotesk",system-ui,sans-serif}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:300;line-height:1.08;margin:0}
+section{padding:7rem 1.5rem;max-width:1040px;margin:0 auto}
+p{max-width:62ch}
+#hero{position:relative;height:100svh;min-height:560px;max-width:none;padding:0;overflow:hidden}
+#net{position:absolute;inset:0;width:100%;height:100%}
+.heroText{position:absolute;left:0;right:0;bottom:12svh;padding:0 1.5rem;max-width:1040px;margin:auto;pointer-events:none}
+.heroText h1{font-size:clamp(2.8rem,9vw,6.6rem);letter-spacing:-.02em}
+.heroText p{color:var(--mute);margin:1.2rem 0 0}
+.hint{font-size:.85rem;color:var(--mute)}
+h2{font-size:clamp(2rem,5vw,3.4rem);margin-bottom:1.2rem}
+.chain{margin-top:2.5rem;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:minmax(150px,1fr) 2.4fr;gap:1.5rem;padding:1.6rem 0 1.6rem 1.2rem;border-bottom:1px solid var(--line);border-left:4px solid var(--k);margin-left:calc(var(--i)*1.2rem)}
+.row h3{font-size:1.6rem;font-weight:600;color:var(--k)}
+.row p{margin:0;color:var(--mute)}
+@media(max-width:640px){.row{grid-template-columns:1fr;gap:.4rem;margin-left:calc(var(--i)*.5rem)}}
+.lab{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:2rem;margin-top:2rem}
+.lab .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:2.5rem;align-items:center}
+@media(max-width:760px){.lab .grid{grid-template-columns:1fr}}
+.ctl{margin-bottom:1.3rem}
+.ctl label{display:flex;justify-content:space-between;font-weight:500}
+.ctl span{font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--k);height:28px}
+input[type=range]:focus-visible,button:focus-visible{outline:2px solid var(--c3);outline-offset:3px}
+.pre{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.6rem}
+button{font:inherit;color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:.5rem 1rem;cursor:pointer}
+button:hover,button.on{border-color:var(--c3);background:color-mix(in srgb,var(--c3) 14%,transparent)}
+.big{font-family:Fraunces,serif;font-size:clamp(4rem,12vw,7rem);font-weight:300;line-height:1}
+.note{color:var(--mute);font-size:.95rem;min-height:3.2em;margin-top:.8rem}
+.bar{height:10px;border-radius:9px;background:var(--line);overflow:hidden;margin:1rem 0}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c4));transition:width .35s}
+.cond{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.2rem;margin-top:2rem}
+.cond div{padding:1.3rem;border-radius:16px;border:1px solid var(--line);border-top:4px solid var(--k)}
+.cond h3{font-size:1.25rem;font-weight:600;margin-bottom:.4rem}
+.cond p{margin:0;color:var(--mute);font-size:.97rem}
+.models{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2rem}
+.models div{flex:1 1 240px;padding:1.2rem;border-radius:16px;background:var(--panel);border:1px solid var(--line)}
+.models b{display:block;margin-bottom:.3rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem}
+@media(max-width:700px){.two{grid-template-columns:1fr}}
+.two h3{font-size:1.5rem;font-weight:600;margin-bottom:.8rem}
+.two ul{margin:0;padding-left:1.1rem;color:var(--mute)}
+.two li{margin-bottom:.5rem}
+.end{text-align:center;padding-bottom:9rem}
+.end h2{font-size:clamp(2rem,6vw,4rem);max-width:18ch;margin:0 auto 1.5rem}
+.end p{margin:0 auto;color:var(--mute)}
+.by{margin-top:2.5rem;font-family:Fraunces,serif;font-size:1.2rem}
+.lg{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin-top:2rem}.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:1.5rem}.card h3{font-size:1.4rem;font-weight:600;margin-bottom:.4rem}.card>p{font-size:.95rem;color:var(--mute);margin:0 0 1rem}.card canvas,.card svg{width:100%;display:block;border-radius:12px}#ds{background:#000}select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.35rem .6rem}.scale{position:relative;height:10px;background:var(--line);border-radius:9px;margin:1rem 0 1.6rem}.scale i{position:absolute;left:0;top:0;bottom:0;border-radius:9px;background:var(--c3)}.scale u{position:absolute;top:-4px;width:2px;height:18px;background:var(--ink)}details.ch{border-top:1px solid var(--line);padding:1rem 0}details.ch summary{cursor:pointer;font-family:Fraunces,serif;font-size:1.5rem}details.ch p{color:var(--mute)}#ed{display:flex;flex-wrap:wrap;gap:4px;margin:1rem 0}#ed i{width:18px;height:18px;border-radius:5px}.btns{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0 .5rem}#sg{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}#sg button{aspect-ratio:1;border:0;padding:0;border-radius:50%}#nc{cursor:crosshair;background:#000}
+.vs{position:relative;background:#02030a}.vs canvas{width:100%;height:min(80vh,780px);display:block;touch-action:pan-y;cursor:crosshair}
+.hud{position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;align-items:center;gap:.3rem 1.3rem;padding:2.4rem 1.2rem .8rem;font-size:.82rem;color:#d6dcff;background:linear-gradient(transparent,rgba(2,3,10,.9));pointer-events:none}.hud>*{pointer-events:auto}.hud b{font:600 1.05rem Fraunces,Georgia,serif;color:#fff}.hud label{display:flex;gap:.5rem;align-items:center}.hud input[type=range]{width:130px;accent-color:#ffb454;height:20px}
+.card:has(#nc),.card:has(#ds),.card:has(#gl),.card:has(#hsv),.card:has(#ns),.card:has(#qa){display:none}
+#p2{width:100%;height:min(70vh,560px);display:block;background:#070a1c;border-radius:18px;touch-action:pan-y;cursor:crosshair}
+#nav{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:50;display:flex;gap:2px;padding:4px;border-radius:999px;background:rgba(15,19,48,.85);backdrop-filter:blur(10px);border:1px solid #252c52;max-width:96vw;overflow-x:auto}
+#nav button{border:0;padding:.4rem .7rem;font-size:.78rem;color:#e9edff;white-space:nowrap}
+@media(max-width:700px){body{font-size:.98rem}section{padding:3.2rem 1.1rem}.vs canvas{height:min(72vh,600px)}.lab{padding:1rem}button{padding:.35rem .8rem;font-size:.85rem}.cond{grid-template-columns:1fr 1fr;gap:.6rem}.cond div{padding:.8rem}.cond h3{font-size:1rem}.cond p{font-size:.85rem}.models div{flex:1 1 140px;padding:.8rem;font-size:.9rem}.hud{font-size:.78rem}}
+.lg{grid-template-columns:1fr;gap:1rem;width:min(1400px,96vw);margin-left:50%;transform:translateX(-50%)}
+.card{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem 1.4rem;padding:1rem 1.1rem 1.1rem;border-radius:18px}
+.card>h3{margin:0;font-size:1.05rem}.card>p{margin:0;font-size:.82rem;flex:1 1 280px}
+.card>canvas,.card>svg,.card>#sg,.card>#ed,.card>.note,.card>.scale{flex:1 1 100%}
+.card>canvas{max-height:74vh;object-fit:contain}.card>svg{max-height:min(74vh,600px)}
+.card>.ctl{flex:1 1 200px;margin:0;font-size:.85rem}.card>.btns{margin:0}.card>.big{flex:0 0 auto}.card>.note{font-size:.82rem;min-height:0;margin:0}
+#sg{grid-template-columns:repeat(10,1fr);gap:10px;max-width:860px;margin:0 auto}
+#ed{justify-content:center;gap:8px}#ed i{width:clamp(22px,4.4vw,54px);height:clamp(22px,4.4vw,54px);border-radius:12px}
+#pl{width:min(1400px,96vw);margin:2rem 0 0 50%;transform:translateX(-50%)}#pc{width:100%;display:block}.chain{display:none}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.bar i{transition:none}}
+</style>
+</head>
+<body>
+<section id="hero" aria-label="Title">
+<canvas id="net" aria-hidden="true"></canvas>
+<div class="heroText">
+<h1>The Principle of Distinction</h1>
+<p>A proposed architecture for how organized systems are determined, connected, constrained, and sustained. By Billy Barbeau.</p>
+<p class="hint">Move your pointer through the field. Nearby points form relationships.</p>
+</div>
+</section>
+
+<section>
+<h2>One question beneath every scale</h2>
+<p>A star, a molecule, a cell, and a brain work through different mechanisms. Each still has to answer the same thing: what makes it identifiable, what connects its parts, and what lets its organization persist or disappear?</p>
+<div id="pl"><canvas id="p2" role="img" aria-label="Five aspects as a flowing stream of particles"></canvas><canvas id="pc" style="display:none" width="960" height="400" role="img" aria-label="Five aspects as a flowing stream of particles"></canvas><div class="note" id="pn" aria-live="polite" style="max-width:62ch;margin:.5rem auto 0;text-align:center"></div></div>
+<div class="chain">
+<div class="row" style="--k:var(--c1);--i:0"><h3>Distinction</h3><p>The determination of a state, and the properties by which it can be identified.</p></div>
+<div class="row" style="--k:var(--c2);--i:1"><h3>Relationship</h3><p>The physical or informational connections among states, which can create properties the parts lack alone.</p></div>
+<div class="row" style="--k:var(--c3);--i:2"><h3>Constraint</h3><p>The conditions that decide which arrangements and transitions are possible.</p></div>
+<div class="row" style="--k:var(--c4);--i:3"><h3>Organization</h3><p>The coherent structure those relationships and constraints produce. Diamond and graphite are both carbon; arrangement is the difference.</p></div>
+<div class="row" style="--k:var(--c5);--i:4"><h3>Persistence</h3><p>How a system keeps its identity through change, or transforms into something else.</p></div>
+</div>
+<p class="hint" style="margin-top:1.5rem">These are five aspects of organized existence, not five chronological stages.</p>
+</section>
+
+<section>
+<h2>The index, in your hands</h2>
+<p>The Principle of Distinction Organization Index (PDOI) multiplies three things: how distinguishable the correlated state is from an uncorrelated one, how much information the parts share, and how selective the transitions are. Adjust them and watch the result.</p>
+<div class="lab">
+<div class="pre" role="group" aria-label="Presets">
+<button data-p="0,0,1">Product state</button>
+<button data-p="0.75,1,1" class="on">Bell pair</button>
+<button data-p="0.4,0.5,0.6">Partly correlated</button>
+<button data-p="0.75,1,0.2">Bell pair, noisy transitions</button>
+</div>
+<div class="grid">
+<div>
+<div class="ctl" style="--k:var(--c1)"><label for="d">Distinguishability d′ <span id="dv"></span></label><input id="d" type="range" min="0" max="1" step="0.01"></div>
+<div class="ctl" style="--k:var(--c2)"><label for="r">Relational information r <span id="rv"></span></label><input id="r" type="range" min="0" max="1" step="0.01"></div>
+<div class="ctl" style="--k:var(--c3)"><label for="c">Constraint selectivity c <span id="cv"></span></label><input id="c" type="range" min="0" max="1" step="0.01"></div>
+</div>
+<div aria-live="polite">
+<div class="big" id="out">0.75</div>
+<div class="bar"><i id="fill"></i></div>
+<div class="note" id="note"></div>
+</div>
+</div>
+<p class="hint" style="margin:1.5rem 0 0">For one relationship, PDOI = d′ × r × c. The Bell pair values come from the worked example: d′ = 3/4, r = 1 with the corrected normalization, c = 1.</p>
+</div>
+</section>
+
+<section>
+<h2>The test that can fail</h2>
+<p>Quantum mechanics already explains entanglement, so redescribing it proves nothing. The experiment asks whether PDOI predicts a prespecified collective outcome, such as register parity, better than the complete standard quantum model does, on held-out data.</p>
+<div class="cond">
+<div style="--k:var(--c1)"><h3>A. Baseline</h3><p>Independently characterized qubits, no designed correlations.</p></div>
+<div style="--k:var(--c2)"><h3>B. Correlated</h3><p>A correlated multipartite state with controlled interactions.</p></div>
+<div style="--k:var(--c3)"><h3>C. New topology</h3><p>Matched local statistics, different network of interactions.</p></div>
+<div style="--k:var(--c4)"><h3>D. Perturbed</h3><p>A calibrated rotation or noise channel, then measure the response.</p></div>
+</div>
+<div class="models">
+<div><b>Model 1</b>Local states only.</div>
+<div><b>Model 2</b>The full standard quantum model. The comparison that matters.</div>
+<div><b>Model 3</b>Model 2 plus PDOI, frozen before confirmatory data.</div>
+</div>
+</section>
+
+<section>
+<h2>Honest by design</h2>
+<div class="two">
+<div><h3>It claims</h3><ul><li>Organized systems can be examined through five connected aspects.</li><li>PDOI is a candidate for added predictive value.</li><li>The proposal is falsifiable, and the experiment can come out against it.</li></ul></div>
+<div><h3>It does not claim</h3><ul><li>To replace quantum mechanics, relativity, or biology.</li><li>To have explained subjective experience.</li><li>To have a result before the experiments are run.</li></ul></div>
+</div>
+</section>
+
+<section id="stages" style="max-width:none;padding:2rem 0 3rem">
+<div class="vs"><canvas id="n2" aria-label="Neural storm: tap or drag to fire neurons" role="img"></canvas><div class="hud"><b>Neural storm</b><span>Tap or drag to fire neurons. Each spark relays to its neighbors.</span><label>Coupling <input id="n2k" type="range" min="0.1" max="1" step="0.05" value="0.55"></label></div></div>
+<div class="vs"><canvas id="s2" aria-label="Double slit with particles building an interference pattern" role="img"></canvas><div class="hud"><b>Double slit</b><span>Every dot is one particle. The pattern builds from interference.</span><label>Wavelength <input id="s2l" type="range" min="400" max="700" value="540"></label><label>Separation <input id="s2d" type="range" min="5" max="30" value="12"></label><label><input id="s2w" type="checkbox"> Record which slit</label></div></div>
+<div class="vs"><canvas id="l2" aria-label="Gravitational lens bending a field of galaxies" role="img"></canvas><div class="hud"><b>Gravitational lens</b><span>Drag the mass through the galaxy field. Align it for an Einstein ring.</span><label>Mass <input id="l2m" type="range" min="1" max="12" value="5"></label></div></div>
+<div class="vs"><canvas id="h1" aria-label="Hydrogen atom: tap an orbit to move the electron" role="img"></canvas><div class="hud"><b>Hydrogen’s fingerprint</b><span id="h1t">Tap an orbit to send the electron there. Each drop leaves a line in the spectrum.</span><button id="h1c">Clear spectrum</button></div></div>
+<div class="vs"><canvas id="b2" aria-label="Bell test: entangled photon pairs and a live score" role="img"></canvas><div class="hud"><b>Bell test, live</b><span>Entangled pairs fly to two detectors. S above 2 beats any classical model.</span><label>a <input id="bqa" type="range" min="0" max="180" value="0"></label><label>a′ <input id="bqb" type="range" min="0" max="180" value="90"></label><label>b <input id="bqc" type="range" min="0" max="180" value="45"></label><label>b′ <input id="bqd" type="range" min="0" max="180" value="135"></label></div></div>
+<div class="vs"><canvas id="e2" aria-label="Natural selection: drag the food hill and watch the population follow" role="img"></canvas><div class="hud"><b>Natural selection</b><span id="e2t">Drag the gold hill. Birds that fit the food survive and breed.</span><label>Mutation <input id="e2m" type="range" min="0.05" max="1" step="0.05" value="0.3"></label><button id="e2r">Reset</button></div></div>
+</section>
+<section>
+<h2>The science lab</h2>
+<p>Three established experiments, live. They show the physics the framework builds on, not evidence for the framework itself.</p>
+<div class="lg">
+<div class="card"><h3>Hydrogen’s fingerprint</h3><p>Pick a downward jump. The photon’s energy equals the gap between levels.</p>
+<svg id="hsv" viewBox="0 0 300 190" role="img" aria-label="Hydrogen energy levels"></svg>
+<div class="ctl" style="margin:1rem 0 .4rem"><label for="hu">From level n = <select id="hu"><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option></select> to n = <select id="hl"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></label></div>
+<div class="note" id="hout"></div></div>
+<div class="card"><h3>Double slit</h3><p>Each electron or photon lands once, yet the pattern builds from interference.</p>
+<canvas id="ds" width="960" height="340" role="img" aria-label="Interference pattern"></canvas>
+<div class="ctl" style="--k:var(--c1);margin-top:1rem"><label for="sl">Wavelength <span id="slv"></span></label><input id="sl" type="range" min="400" max="700" value="550"></div>
+<div class="ctl" style="--k:var(--c2)"><label for="sd">Slit separation <span id="sdv"></span></label><input id="sd" type="range" min="5" max="30" value="10"></div>
+<label><input type="checkbox" id="wc"> Record which slit (destroys interference)</label></div>
+<div class="card"><h3>Gravitational lens</h3><p>A massive cluster bends light from a distant galaxy. Line them up and the images become a ring.</p>
+<canvas id="gl" width="960" height="400" style="background:#000" role="img" aria-label="Gravitational lensing"></canvas>
+<div class="ctl" style="--k:var(--c3);margin-top:1rem"><label for="gm">Lens mass <span id="gmv"></span></label><input id="gm" type="range" min="1" max="10" value="4"></div>
+<div class="ctl" style="--k:var(--c1)"><label for="gb">Source offset <span id="gbv"></span></label><input id="gb" type="range" min="0" max="80" value="0"></div></div>
+<div class="card"><h3>GPS and relativity</h3><p>Satellite clocks run fast by about 38 microseconds a day. Uncorrected, position errors pile up.</p>
+<div class="ctl" style="--k:var(--c2)"><label for="gd">Days without correction <span id="gdv"></span></label><input id="gd" type="range" min="0" max="7" value="1"></div>
+<div class="big" id="ge" style="font-size:3.2rem"></div>
+<div class="note">Motion slows the clock by about 7 µs/day. Weaker gravity at altitude speeds it by about 45 µs/day. Net: about +38 µs/day, or roughly 11.5 km of ranging error per day.</div></div>
+<div class="card"><h3>Entropy meter</h3><p>Shannon entropy measures uncertainty. Bias the coin and watch the surprise drain away.</p>
+<div class="ctl" style="--k:var(--c3)"><label for="ep">Chance of heads <span id="epv"></span></label><input id="ep" type="range" min="0.01" max="0.99" step="0.01" value="0.5"></div>
+<div id="ed" aria-label="48 coin flips"></div><div class="big" id="eh" style="font-size:2.4rem"></div>
+<div class="btns"><button id="ef">Flip again</button></div><div class="note">A fair coin carries the most uncertainty: 1 bit per flip. A nearly certain coin carries almost none.</div></div>
+<div class="card"><h3>One letter, many levels</h3><p>Flip a single DNA base in the beta-globin gene and follow the change upward.</p>
+<label><input type="checkbox" id="dm"> Apply the sickle-cell mutation (A to T)</label>
+<div class="big" id="dseq" style="font-size:2rem;margin:1rem 0 .3rem"></div><div id="dpro" style="margin-bottom:.8rem"></div>
+<svg id="dcell" viewBox="0 0 300 80" role="img" aria-label="Red blood cells"></svg><div class="note" id="dn"></div></div>
+<div class="card"><h3>Natural selection</h3><p>Move the best-fit beak size, then run generations. Selection shifts the population; mutation keeps supplying variation.</p>
+<canvas id="ns" width="960" height="300" role="img" aria-label="Distribution of beak sizes"></canvas>
+<div class="ctl" style="--k:var(--c3);margin-top:1rem"><label for="so">Best-fit beak size (seed hardness) <span id="sov"></span></label><input id="so" type="range" min="0" max="10" step="0.1" value="7"></div>
+<div class="btns"><button id="nn">Next generation</button><button id="nr">Run</button><button id="nz">Reset</button></div><div class="note" id="nt"></div></div>
+<div class="card"><h3>Find the signal</h3><p>One dot is a slightly different hue. Distinguishing is the first act of intelligence. Shrink the gap to raise the difficulty.</p>
+<div id="sg" role="group" aria-label="Dots, one of a different hue"></div>
+<div class="ctl" style="--k:var(--c4);margin-top:1rem"><label for="sdf">Difficulty <span id="sdv"></span></label><input id="sdf" type="range" min="4" max="60" value="30"></div><div class="note" id="sst">Click the odd one out.</div></div>
+<div class="card"><h3>Spreading activity</h3><p>Click anywhere to stimulate a neuron. Raise the coupling and activity cascades through the network.</p>
+<canvas id="nc" width="960" height="400" role="img" aria-label="Neural network"></canvas>
+<div class="ctl" style="--k:var(--c5);margin-top:1rem"><label for="nk">Coupling strength <span id="nkv"></span></label><input id="nk" type="range" min="0.1" max="1" step="0.05" value="0.5"></div>
+<div class="btns"><button id="nb">New network</button></div><div class="note" id="na">Active neurons: 0</div></div>
+<div class="card"><h3>Bell test</h3><p>Four detector angles. Classical local models cap the score S at 2; entangled photons reach 2.83.</p>
+<div class="ctl" style="--k:var(--c4)"><label for="qa">Alice angle a <span id="qav"></span></label><input id="qa" type="range" min="0" max="180" value="0"></div>
+<div class="ctl" style="--k:var(--c4)"><label for="qb">Alice angle a′ <span id="qbv"></span></label><input id="qb" type="range" min="0" max="180" value="90"></div>
+<div class="ctl" style="--k:var(--c5)"><label for="qc">Bob angle b <span id="qcv"></span></label><input id="qc" type="range" min="0" max="180" value="45"></div>
+<div class="ctl" style="--k:var(--c5)"><label for="qd">Bob angle b′ <span id="qdv"></span></label><input id="qd" type="range" min="0" max="180" value="135"></div>
+<div class="big" id="sv" style="font-size:3.2rem"></div>
+<div class="scale"><i id="sf"></i><u style="left:66.7%" title="Classical limit 2"></u><u style="left:94.3%" title="Quantum limit 2.83"></u></div>
+<div class="note" id="sn"></div></div>
+</div>
+</section>
+
+<section>
+<h2>Read the manuscript</h2>
+<p>The full text, chapter by chapter. Open any chapter.</p>
+<details class="ch" open><summary>Prologue: The question beneath the universe</summary>
+<p>Look at the night sky long enough and the familiar picture begins to change. The stars become distant suns, each governed by nuclear reactions, gravity, pressure, and the transport of energy. Galaxies gather into enormous structures. Now move in the opposite direction: into a planet’s chemistry, into a living cell where molecular networks coordinate astonishing numbers of processes, into a nervous system where electrical and chemical activity produces perception, memory, and behavior.</p>
+<p>The scales are almost impossibly different, yet each system presents a problem of organization. A star depends on the balance of gravity, pressure, temperature, and nuclear reactions. A molecule depends on its structure and interactions. A cell survives by maintaining a controlled internal environment. A brain processes information through distributed networks whose activity changes from moment to moment. These systems do not share one mechanism, and their differences are essential. But one question applies to all of them: what makes a system identifiable, what connects its parts, and what governs the transformations through which its organization persists or disappears?</p>
+<p>The Principle of Distinction begins there. It proposes that the determination of states, and the relationships and constraints governing their transformations, are fundamental to understanding organized existence. It is not an attempt to replace physics, chemistry, or biology with a slogan. It is an attempt to learn whether the architecture underlying organized systems can be described in a common conceptual framework. The question is ambitious. Its answer must be earned.</p></details>
+<details class="ch"><summary>Chapter 1. Distinction: the determination of reality</summary>
+<p>Physics does not describe the universe by naming objects. It determines states. A particle is characterized by measurable properties. A quantum system is represented by a state that fixes the probabilities of its measurement outcomes. A field has values that vary across spacetime. A chemical system has a configuration, an energy, and a set of possible reactions.</p>
+<p>A distinction, in this framework, is not an observer noticing that two things look different. It is the determination of a physical or informational state: the condition through which a system has identifiable properties and can take part in relationships and transformations. This matters because behavior depends on the state occupied. The same quantum system prepared two ways gives different statistics; a molecule’s reactivity depends on its electronic configuration; a cell’s behavior depends on its internal chemistry. But determination alone does not explain organization. For that, the investigation must move to relationships.</p></details>
+<details class="ch"><summary>Chapter 2. Relationship: the structure between things</summary>
+<p>The Sun and Earth are about 150 million kilometers apart. Yet their gravitational relationship governs Earth’s orbit and supplies nearly all the energy for its surface ecosystems. This is not a metaphor; it is interaction described by physical law. Atoms form bonds, and the resulting molecules have properties no atom shows alone. Entangled systems show correlations that resist explanation by classical models of independent local properties.</p>
+<p>Relationships are therefore not decorations attached to finished objects. They can be central to what the systems are. A relationship needs identifiable participants, but it can also create new properties, dependencies, and possibilities. A system’s identity is not always exhausted by its components; its organization may depend on how they are connected.</p></details>
+<details class="ch"><summary>Chapter 3. Constraint: the architecture of possibility</summary>
+<p>No physical system is free to become anything. A planet’s path is constrained by its motion and gravitational environment. A reaction follows pathways set by structure, energy, and conditions. A crystal forms within limits imposed by atomic interactions and thermodynamics. Some constraints are fundamental, such as conservation laws; others come from geometry, boundaries, interaction strengths, or available energy. In quantum mechanics, evolution is constrained by the Hamiltonian. In a cell, by membrane transport, enzyme activity, energy supply, and regulation.</p>
+<p>Constraint is not merely an obstacle to organization. It is part of what makes a particular organization possible. A stable structure exists because some configurations and transitions are permitted and others are not. The Principle of Distinction places constraint beside state determination and relationship as part of the architecture of organized existence.</p></details>
+<details class="ch"><summary>Chapter 4. Organization: the emergence of structure</summary>
+<p>The same element, carbon, can form diamond or graphite. Diamond is a strong three-dimensional covalent network. Graphite is layered sheets with weak forces between them. One is extremely hard; the other is soft enough to leave a mark on paper. Composition alone does not explain the difference. Arrangement does.</p>
+<p>Organization changes what components can do, and the same pattern appears in molecules, biological networks, and collective behavior. The Principle of Distinction describes organization as the coherent arrangement of determinate states through relationships and constraints. This is where a collection of components becomes a system with characteristic behavior.</p></details>
+<details class="ch"><summary>Chapter 5. Persistence and transformation: identity without stillness</summary>
+<p>A living organism is not a fixed arrangement of molecules; it is a continuous process. Proteins are made and broken down, cells exchange materials, energy flows through metabolism, damaged parts are repaired. The organism changes while keeping enough continuity to remain itself. A system can lose components without losing its identity, and can keep every component yet lose its organization if the relationships among them are disrupted.</p>
+<p>Persistence does not require every component to stay unchanged. It requires the system to retain the conditions that sustain its organization. Transformation occurs when those conditions change; some changes preserve identity, others produce a new organization or end the system. That raises a measurable question: which relationships and constraints are essential to a particular system’s persistence, and how much disruption can it withstand before its organization changes fundamentally?</p></details>
+<h2 style="margin-top:3rem">Part II. The physical universe</h2>
+<details class="ch"><summary>Chapter 6. Matter: the organization of physical states</summary>
+<p>The hydrogen atom is one of nature’s simplest systems, yet it forced physics beyond classical intuition. Its electron is described by a quantum state, not a tiny planet on an orbit. The atom has quantized energy levels: absorb energy and it moves to a higher state; fall to a lower one and it emits a photon whose energy matches the gap. Those transitions produce the spectral lines used to identify hydrogen in laboratories and in distant stars.</p>
+<p>This is more than a convenient description. It shows how physical identity, interaction, and allowed transformation are mathematically connected. The Principle of Distinction approaches matter through this organization of states and relationships. It does not replace quantum or atomic theory; it asks whether the determination of states and the constraints on their relationships can be studied as part of a wider architecture.</p></details>
+<details class="ch"><summary>Chapter 7. Energy: transformation across the universe</summary>
+<p>Deep in the Sun, hydrogen nuclei fuse into helium. The released energy moves outward and escapes as radiation. Some reaches Earth, warms it, drives the atmosphere, and powers photosynthesis, which turns light into chemical energy that flows through food webs. Nuclear processes inside a star help sustain the chemistry of life on a planet.</p>
+<p>Energy is not a substance existing apart from physical systems; it is a measurable quantity tied to their states and transformations. A ball rolling downhill, a battery discharging, and a star shining are all conversions. The Principle of Distinction examines energy through the transformations available to organized systems and the constraints governing them. Energy transfer is one way organization can persist, change, or collapse.</p></details>
+<details class="ch"><summary>Chapter 8. Space: the geometry of physical relationships</summary>
+<p>In general relativity, gravity is not a force across a fixed background. Matter and energy shape spacetime, and that geometry guides matter and light. Gravitational lensing shows it: light from a distant galaxy passes a massive cluster, whose mass curves spacetime and bends the path. Astronomers see distorted images, bright arcs, or multiple images of the same galaxy.</p>
+<p>Space is therefore not an empty stage; its geometry is part of the physical description. The Principle of Distinction approaches spatial structure through relationships among events and positions, and proposes that the organization of those relationships bears on the structure of physical reality.</p></details>
+<details class="ch"><summary>Chapter 9. Time: the measurement of transformation</summary>
+<p>Two clocks can measure different elapsed times between the same two events. That is not a defect; it is relativity. Motion changes measured duration, and gravity changes clock rates. GPS satellites experience both effects, and without correction positioning errors would accumulate. Time is not a universal clock ticking identically for every observer.</p>
+<p>The Principle of Distinction examines time through the ordering and duration of events and transformations. A system occupies states, changes between them, and takes part in a sequence of events; the temporal structure of that change is part of its physical description. This does not replace relativity. It places temporal ordering inside the wider architecture of state determination and transformation.</p></details>
+<details class="ch"><summary>Chapter 10. Spacetime: the geometry of events</summary>
+<p>Relativity unifies space and time into a four-dimensional structure. Every event has a place and a moment; different observers assign different coordinates to the same event while the underlying relationships stay consistent. General relativity ties matter and energy to curvature. How spacetime relates to quantum physics remains an open frontier.</p>
+<p>Some theoretical programs connect entanglement with geometry; holographic approaches relate entanglement entropy to geometric quantities, and other work asks whether spacetime emerges from patterns of quantum relationships. These are serious research programs, not experimental proof of the Principle of Distinction. They make one question important: could the organization of physical relationships offer a deeper route to understanding spacetime? The framework gives a setting where that can be investigated alongside the determination and transformation of states.</p></details>
+<h2 style="margin-top:3rem">Part III. The quantum domain</h2>
+<details class="ch"><summary>Chapter 11. Quantum states: the limits of classical description</summary>
+<p>At quantum scales a system cannot always be described as holding definite classical properties waiting to be found. Quantum mechanics represents it by a state that fixes probabilities for outcomes. Superposition lets one coherent description contain several possible outcomes, and interference occurs when their probability amplitudes combine. This is not ignorance about a hidden classical state. It is a different physical framework.</p>
+<p>One established measure is a starting point. For density operators ρ and σ, the trace distance is D(ρ,σ) = ½‖ρ − σ‖₁. It is zero for identical states, one for states perfectly distinguishable by an optimal measurement, and in between for partial distinguishability. It is a precise tool for studying how quantum states are determined.</p></details>
+<details class="ch"><summary>Chapter 12. The double-slit experiment: the behavior of possibility</summary>
+<p>An electron is fired at a barrier with two narrow slits, with a detector behind it. When coherence between the paths is preserved, detections accumulate into an interference pattern. Treating electrons as classical pellets passing through one slit or the other cannot explain it. Quantum mechanics describes the alternatives with probability amplitudes that interfere. When which-path information becomes available through a physical interaction, interference is reduced or eliminated.</p>
+<p>The relationship among quantum alternatives has measurable consequences. That raises a natural question for the framework: how do the determination of possible states and the relationships among them shape a quantum system’s behavior? The experiment does not prove the framework, since standard quantum mechanics already predicts it. It provides a clean setting where the organization of alternatives can be studied quantitatively.</p></details>
+<details class="ch"><summary>Chapter 13. Entanglement: the whole has a structure of its own</summary>
+<p>Prepare two photons in an entangled state and send them to separate stations. Researchers choose settings and record outcomes independently. Compared afterward, the correlations can violate Bell inequalities, ruling out broad classes of local hidden-variable explanations under the assumptions tested. One photon does not send a message to the other, and entanglement does not permit faster-than-light communication. The joint state simply contains correlations that the tested models cannot reproduce, so the whole cannot be written as two independent local descriptions.</p>
+<p>This puts relational structure at the center of the physical description, which is why it matters here. But quantum mechanics already predicts entanglement and Bell-test correlations. Its existence does not establish the Principle of Distinction. The framework must make a more specific prediction and test it against the complete standard quantum model.</p></details>
+<details class="ch"><summary>Chapter 14. Measurement: interaction and recorded outcomes</summary>
+<p>A quantum detector produces a record. It does not passively receive an abstract observation; it interacts with the system, becomes correlated with it, and registers an outcome. How to interpret this remains an open topic in quantum foundations. Decoherence describes how environmental interaction suppresses observable interference between certain alternatives. Relational quantum mechanics describes properties relative to interactions between systems. Neither is a single confirmed solution to every aspect of the measurement problem.</p>
+<p>The Principle of Distinction treats measurement as a physical interaction in which states become correlated with apparatus records and particular distinctions become operationally accessible. Its scientific contribution must come from predictions that go beyond restating this.</p></details>
+<h2 style="margin-top:3rem">Part IV. Information and organization</h2>
+<details class="ch"><summary>Chapter 15. Information: the structure of distinguishable states</summary>
+<p>A message is not merely a collection of symbols; its arrangement determines what can be recovered from it. Information theory quantifies uncertainty over possible outcomes with Shannon entropy, H(X) = −Σ p(xᵢ) log₂ p(xᵢ). A binary digit is one of two states, and large collections of bits can encode images, music, text, and instructions. But bit count alone does not determine meaning. A random sequence and a meaningful message can have the same number of bits; their organization differs.</p>
+<p>The Principle of Distinction treats information as distinguishability organized into patterns that can be stored, transmitted, transformed, and interpreted. It also insists on separating information from experience: a machine can process information without that fact alone showing it understands or experiences what it processes.</p></details>
+<details class="ch"><summary>Chapter 16. Entropy: the cost of maintaining organization</summary>
+<p>A living cell keeps a highly organized interior while constantly exchanging matter and energy with its surroundings. A refrigerator keeps a cold interior by consuming electricity and releasing heat. Neither violates thermodynamics. The second law concerns the total entropy of an isolated system; local organization can increase when energy is supplied and entropy is exported to the surroundings. Thermodynamic entropy relates to the number of microscopic configurations compatible with a macroscopic state: S = k_B ln Ω.</p>
+<p>Shannon and thermodynamic entropy are mathematically related but conceptually distinct: one measures uncertainty in a probability distribution, the other is a physical state function. For the framework, the research question is how organized systems keep identifiable structure within energetic and physical constraints. That is sharpest in living systems, which persist through continuous exchange rather than stillness.</p></details>
+<h2 style="margin-top:3rem">Part V. Biological organization</h2>
+<details class="ch"><summary>Chapter 17. The cell: maintaining an internal world</summary>
+<p>A cell survives by maintaining conditions that differ from its surroundings. Its membrane controls exchange, transport proteins move ions and molecules, enzymes accelerate reactions, metabolic pathways capture energy, and regulatory networks respond to change. It is not a sealed container but a controlled, dynamic system whose components are constantly replaced while its organization persists.</p>
+<p>The cell’s boundary is a physical distinction between inside and outside; its biochemical networks coordinate activity; its constraints decide which exchanges and reactions can occur. When it loses the capacity to maintain that organization, function deteriorates. That makes cellular persistence a promising domain for studying how organization relates to resilience.</p></details>
+<details class="ch"><summary>Chapter 18. DNA: biological information in a physical structure</summary>
+<p>DNA stores genetic information in sequences of four bases: adenine, thymine, cytosine, and guanine. The sequence helps determine which proteins can be made and contributes to regulating biological processes. A single change can have consequences far from its location. In sickle cell disease, a specific mutation in the beta-globin gene changes one amino acid in the protein. The resulting hemoglobin can polymerize under low oxygen, deforming red blood cells and affecting circulation.</p>
+<p>A molecular change thus propagates through levels: sequence to protein, protein to cell behavior, cell behavior to tissue and organism. The Principle of Distinction offers a framework for examining these connected levels of physical and informational organization.</p></details>
+<details class="ch"><summary>Chapter 19. Evolution: organization across generations</summary>
+<p>Evolution is a history of changing populations, not a march toward a destination. Variation arises through mutation and recombination; natural selection shifts trait frequencies when traits affect survival and reproduction; drift, migration, and other processes also act. Darwin’s finches are the classic case: differences in beak shape and size track feeding strategies and food sources, and environmental conditions decide which traits pay off. Over generations, populations change.</p>
+<p>The Principle of Distinction examines evolution through the emergence, inheritance, and selection of biological differences within changing environmental relationships. It does not replace evolutionary biology. It asks whether the organization of inherited states and their relationships with environmental constraints can supply additional useful measurements of persistence and adaptation.</p></details>
+<h2 style="margin-top:3rem">Part VI. Intelligence and consciousness</h2>
+<details class="ch"><summary>Chapter 20. Intelligence: finding the signal in the world</summary>
+<p>A crowded room holds an enormous amount of sensory information. Voices overlap, people move, light changes, conversations begin and end. The brain must identify what matters. It recognizes faces, separates voices, tracks movement, recalls familiar patterns, and decides where attention goes. This is not one operation. It depends on coordinated perception, memory, learning, prediction, and decision-making.</p>
+<p>Intelligence is the ability to identify meaningful patterns and respond adaptively. The Principle of Distinction examines it through the organization of information and the ability to discriminate among relevant states and possible actions. But distinction alone is not intelligence. Intelligent behavior also needs retaining information, learning from experience, evaluating alternatives, and coordinating decisions with action. The scientific question is whether the framework can identify measurable organizational properties that improve predictions of intelligent performance.</p></details>
+<details class="ch"><summary>Chapter 21. Cognition: the organization of thought</summary>
+<p>Recognizing a face involves visual processing, feature extraction, memory, and context. Solving a math problem involves representing quantities, finding relationships, holding intermediate results, and choosing operations. Both depend on distributed neural activity. The human brain has billions of neurons joined by an immense network of synapses, communicating through electrical and chemical signals in patterns that change with perception, learning, and behavior.</p>
+<p>The Principle of Distinction approaches cognition through the determination and coordination of informational states. It asks how sensory information becomes differentiated, how relationships among representations shape interpretation, and how constraints limit the responses of a cognitive system. Its value in neuroscience depends on whether these ideas can become measurable predictions beyond existing accounts of neural processing.</p></details>
+<details class="ch"><summary>Chapter 22. Consciousness: the unfinished question</summary>
+<p>A camera can register the wavelengths of a sunset. A computer can classify the colors, identify the clouds, and describe the scene. But the experience of watching it is another matter: color, depth, sound, temperature, memory, emotion, and a sense of presence integrated into one experience. Why should physical information processing be accompanied by subjective experience? This remains one of the deepest unresolved questions in science.</p>
+<p>Neuroscience has identified neural processes associated with conscious perception and studies how brain activity changes across sleep, anesthesia, wakefulness, and disorders of consciousness, using connectivity, information integration, perturbational responses, and reportable experience. The Principle of Distinction proposes studying consciousness within the broader organization of physical and informational states. A conscious organism differentiates internal from external conditions, coordinates sensory information, regulates its body, integrates activity across distributed networks, monitors its own state, uses memory, and keeps continuity through change. These processes are measurable, but measuring them does not automatically solve the problem of subjective experience.</p>
+<p>The framework does not claim that information processing alone explains consciousness, or that the hard problem is resolved. It proposes a research direction: test whether the organization of distinguishable states, relationships, and constraints helps explain measurable changes in conscious states, and ask what additional account experience itself requires.</p></details>
+</section>
+
+<section class="end">
+<h2>The question beneath the universe is still open</h2>
+<p>A theory of everything is not earned by declaring it. It is earned by predicting something the established models do not, in a way anyone can check.</p>
+<div class="by">Billy Barbeau, originator of the Principle of Distinction</div>
+</section>
+
+<script>
+(function(){
+var cv=document.getElementById('net'),x=cv.getContext('2d'),W,H,P=[],m={x:-999,y:-999},
+cols=['#7fe3d4','#9b8cff','#ffb454','#ff7aa8','#8fd16a'],still=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function size(){var r=devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;cv.width=W*r;cv.height=H*r;x.setTransform(r,0,0,r,0,0);
+var n=Math.min(110,Math.floor(W*H/9000));P=[];for(var i=0;i<n;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,c:cols[i%5]})}
+function draw(){x.clearRect(0,0,W,H);
+for(var i=0;i<P.length;i++){var a=P[i];
+if(!still){a.x+=a.vx;a.y+=a.vy;if(a.x<0||a.x>W)a.vx*=-1;if(a.y<0||a.y>H)a.vy*=-1;
+var dx=m.x-a.x,dy=m.y-a.y,dm=Math.hypot(dx,dy);if(dm<160&&dm>1){a.x+=dx/dm*.5;a.y+=dy/dm*.5}}
+for(var j=i+1;j<P.length;j++){var b=P[j],d=Math.hypot(a.x-b.x,a.y-b.y),lim=Math.hypot(m.x-a.x,m.y-a.y)<200?170:85;
+if(d<lim){x.globalAlpha=(1-d/lim)*.7;x.strokeStyle=a.c;x.lineWidth=1;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}
+x.globalAlpha=1;x.fillStyle=a.c;x.beginPath();x.arc(a.x,a.y,2.2,0,6.283);x.fill()}
+if(!still)requestAnimationFrame(draw)}
+addEventListener('resize',function(){size();if(still)draw()});
+cv.parentNode.addEventListener('pointermove',function(e){var r=cv.getBoundingClientRect();m.x=e.clientX-r.left;m.y=e.clientY-r.top});
+cv.parentNode.addEventListener('pointerleave',function(){m.x=m.y=-999});
+size();draw();
+var d=document.getElementById('d'),r=document.getElementById('r'),c=document.getElementById('c');
+function upd(){var v=d.value*r.value*c.value;
+document.getElementById('dv').textContent=(+d.value).toFixed(2);document.getElementById('rv').textContent=(+r.value).toFixed(2);document.getElementById('cv').textContent=(+c.value).toFixed(2);
+document.getElementById('out').textContent=v.toFixed(2);document.getElementById('fill').style.width=(v*100)+'%';
+var n=document.getElementById('note');
+n.textContent=v<0.01?'No relational structure detected. Product states score zero, as they should.':v>0.7?'Strong, selective, highly correlated organization.':v>0.3?'Moderate organization. Any one weak term pulls the whole index down.':'Weak organization. The index is a product, so it is only high when all three terms are.'}
+[d,r,c].forEach(function(e){e.addEventListener('input',function(){document.querySelectorAll('.pre button').forEach(function(b){b.classList.remove('on')});upd()})});
+document.querySelectorAll('.pre button').forEach(function(b){b.addEventListener('click',function(){var p=b.dataset.p.split(',');d.value=p[0];r.value=p[1];c.value=p[2];document.querySelectorAll('.pre button').forEach(function(q){q.classList.remove('on')});b.classList.add('on');upd()})});
+d.value=.75;r.value=1;c.value=1;upd();
+var gm=document.getElementById('gm'),gb=document.getElementById('gb'),gl=document.getElementById('gl'),gx=gl.getContext('2d');gx.scale(2,2);
+function lens(){var tE=14*Math.sqrt(+gm.value),b=+gb.value,cx=240,cy=100,r=Math.sqrt(b*b+4*tE*tE);
+document.getElementById('gmv').textContent=gm.value+'×';document.getElementById('gbv').textContent=b;
+gx.clearRect(0,0,480,200);gx.fillStyle='#ffb454';gx.beginPath();gx.arc(cx,cy,6,0,6.283);gx.fill();
+gx.strokeStyle='#fff';gx.globalAlpha=.4;gx.beginPath();gx.arc(cx+b,cy,5,0,6.283);gx.stroke();gx.globalAlpha=1;gx.strokeStyle='#7fe3d4';gx.fillStyle='#7fe3d4';gx.lineWidth=5;
+if(b<3){gx.beginPath();gx.arc(cx,cy,tE,0,6.283);gx.stroke()}else{[(b+r)/2,(b-r)/2].forEach(function(t){gx.beginPath();gx.ellipse(cx+t,cy,5+tE/6,7+Math.min(40,tE*tE/Math.abs(t)*.6),0,0,6.283);gx.fill()})}}
+gm.oninput=gb.oninput=lens;lens();
+var ent=document.getElementById('ep'),ed=document.getElementById('ed');
+function ents(){var p=+ent.value,H=-(p*Math.log2(p)+(1-p)*Math.log2(1-p)),s='';document.getElementById('epv').textContent=p.toFixed(2);document.getElementById('eh').textContent=H.toFixed(2)+' bits per flip';
+for(var i=0;i<48;i++)s+='<i style="background:'+(Math.random()<p?'var(--c3)':'var(--line)')+'"></i>';ed.innerHTML=s}
+ent.oninput=ents;document.getElementById('ef').onclick=ents;ents();
+var dm=document.getElementById('dm');
+function dna(){var m=dm.checked,s='';document.getElementById('dseq').innerHTML='CCT '+(m?'G<span style="color:var(--c4)">T</span>G':'GAG')+' GAG';
+document.getElementById('dpro').textContent='Pro – '+(m?'Val':'Glu')+' – Glu';
+[50,150,250].forEach(function(x){s+=m?'<path d="M'+(x-26)+' 50 Q'+x+' -8 '+(x+26)+' 50 Q'+x+' 26 '+(x-26)+' 50Z" fill="#c0392b"/>':'<ellipse cx="'+x+'" cy="40" rx="26" ry="22" fill="#d9453a"/><ellipse cx="'+x+'" cy="40" rx="10" ry="7" fill="#a82a22"/>'});
+document.getElementById('dcell').innerHTML=s;document.getElementById('dn').textContent=m?'Under low oxygen this hemoglobin can polymerize and deform red cells, affecting circulation.':'Normal hemoglobin keeps red cells round and flexible.'}
+dm.onchange=dna;dna();
+var pop=[],gen=0,tm=null,so=document.getElementById('so'),ns=document.getElementById('ns'),nx=ns.getContext('2d');nx.scale(2,2);
+function rnd(){return (Math.random()+Math.random()+Math.random()-1.5)*1.2}
+function nreset(){pop=[];for(var i=0;i<80;i++)pop.push(Math.min(10,Math.max(0,3+rnd())));gen=0;nshow()}
+function nstep(){var o=+so.value,w=pop.map(function(t){return Math.exp(-Math.pow(t-o,2)/4)}),T=w.reduce(function(a,b){return a+b},0),n=[];
+for(var i=0;i<80;i++){var r=Math.random()*T,k=0;while(k<79&&r>w[k]){r-=w[k];k++}n.push(Math.min(10,Math.max(0,pop[k]+rnd()*.3)))}pop=n;gen++;nshow()}
+function nshow(){var b=[],o=+so.value,m=pop.reduce(function(a,c){return a+c},0)/80;for(var i=0;i<20;i++)b.push(0);nx.clearRect(0,0,480,150);
+pop.forEach(function(t){b[Math.min(19,Math.floor(t*2))]++});b.forEach(function(c,i){nx.fillStyle='#8fd16a';nx.fillRect(i*24+2,148-Math.min(c*3,140),20,Math.min(c*3,140))});
+nx.strokeStyle='#ffb454';nx.lineWidth=2;nx.beginPath();nx.moveTo(o*48,0);nx.lineTo(o*48,150);nx.stroke();
+document.getElementById('sov').textContent=o.toFixed(1);document.getElementById('nt').textContent='Generation '+gen+'. Average beak size '+m.toFixed(1)+'. Best fit '+o.toFixed(1)+' (gold line).'}
+so.oninput=nshow;document.getElementById('nn').onclick=nstep;document.getElementById('nz').onclick=nreset;
+document.getElementById('nr').onclick=function(){if(tm){clearInterval(tm);tm=null;this.textContent='Run'}else{tm=setInterval(nstep,250);this.textContent='Pause'}};nreset();
+var sg=document.getElementById('sg'),hit=0,tri=0;
+function round(){var dl=+document.getElementById('sdf').value,t=Math.floor(Math.random()*40),h=Math.random()*360,s='';document.getElementById('sdv').textContent=dl+'° hue gap';
+for(var i=0;i<40;i++)s+='<button data-t="'+(i==t?1:0)+'" aria-label="dot" style="background:hsl('+(i==t?h+dl:h)+',65%,55%)"></button>';sg.innerHTML=s}
+sg.onclick=function(e){var b=e.target.closest('button');if(!b)return;tri++;if(b.dataset.t=='1')hit++;document.getElementById('sst').textContent='Correct '+hit+' of '+tri+'. '+(b.dataset.t=='1'?'Found it.':'Missed.');round()};
+document.getElementById('sdf').oninput=round;round();
+var nc=document.getElementById('nc'),nq=(function(){var q=nc.getContext('2d');q.scale(2,2);return q})(),NN=[],S=[],act=[],nk=document.getElementById('nk'),niv=null;
+function nbuild(){NN=[];S=[];for(var i=0;i<28;i++){NN.push([30+Math.random()*420,20+Math.random()*160]);S.push([])}
+NN.forEach(function(p,i){NN.map(function(q,j){return [j,Math.hypot(p[0]-q[0],p[1]-q[1])]}).filter(function(x){return x[0]!=i}).sort(function(a,b){return a[1]-b[1]}).slice(0,3).forEach(function(x){S[i].push(x[0]);S[x[0]].push(i)})});
+act=NN.map(function(){return 0});clearInterval(niv);niv=null;ndraw()}
+function ndraw(){nq.clearRect(0,0,480,200);nq.strokeStyle='#5b6396';nq.lineWidth=1;S.forEach(function(l,i){l.forEach(function(j){nq.beginPath();nq.moveTo(NN[i][0],NN[i][1]);nq.lineTo(NN[j][0],NN[j][1]);nq.stroke()})});
+var n=0;NN.forEach(function(p,i){var a=act[i];if(a>.3)n++;nq.fillStyle=a>.05?'rgba(255,180,84,'+Math.min(1,a+.3)+')':'#7fe3d4';nq.beginPath();nq.arc(p[0],p[1],4+6*a,0,6.283);nq.fill()});document.getElementById('na').textContent='Active neurons: '+n}
+function nstep(){var k=+nk.value,nx=act.map(function(a,i){var inp=S[i].some(function(j){return act[j]>.6});return(inp&&a<.2&&Math.random()<k)?1:a*.5});act=nx.map(function(a){return a<.03?0:a});ndraw();if(!act.some(function(a){return a>0})){clearInterval(niv);niv=null}}
+nc.onclick=function(e){var r=nc.getBoundingClientRect(),x=(e.clientX-r.left)*480/r.width,y=(e.clientY-r.top)*200/r.height,b=0,bd=1e9;NN.forEach(function(p,i){var d=Math.hypot(p[0]-x,p[1]-y);if(d<bd){bd=d;b=i}});act[b]=1;ndraw();if(!niv)niv=setInterval(nstep,180)};
+nk.oninput=function(){document.getElementById('nkv').textContent=(+nk.value).toFixed(2)};nk.oninput();document.getElementById('nb').onclick=nbuild;nbuild();
+var pc=document.getElementById('pc'),px=pc.getContext('2d'),pa=0,pt=0,pp=[],PN=[['Distinction','The determination of a state, and the properties by which it can be identified.','#7fe3d4'],['Relationship','The connections among states, which can create properties the parts lack alone.','#9b8cff'],['Constraint','The conditions that decide which arrangements and transitions are possible.','#ffb454'],['Organization','The coherent structure that relationships and constraints produce.','#ff7aa8'],['Persistence','How a system keeps its identity through change, or transforms into something else.','#8fd16a']];
+px.scale(2,2);function py(i){return 100+Math.sin(i*1.3)*45}
+for(var i=0;i<260;i++)pp.push({s:Math.random()*4,v:.003+Math.random()*.006,o:(Math.random()-.5)*46});
+function pset(){document.getElementById('pn').textContent=PN[pa][0]+'. '+PN[pa][1]}
+function pdraw(){pt+=.016;px.clearRect(0,0,480,200);px.lineWidth=1;
+for(var i=0;i<4;i++){px.strokeStyle=PN[i][2];px.globalAlpha=.2;px.beginPath();px.moveTo(48+i*96,py(i));px.lineTo(48+(i+1)*96,py(i+1));px.stroke()}
+pp.forEach(function(q){if(!still)q.s=(q.s+q.v)%4;var i=Math.floor(q.s),f=q.s-i,y=py(i)+(py(i+1)-py(i))*f+q.o*Math.sin(f*3.14159);px.globalAlpha=.85;px.fillStyle=PN[i][2];px.beginPath();px.arc(48+(i+f)*96,y,1.3,0,6.283);px.fill()});
+PN.forEach(function(n,i){var R=7+(i==pa?5:0)+1.5*Math.sin(pt*2+i);px.globalAlpha=1;px.shadowColor=n[2];px.shadowBlur=i==pa?22:10;px.fillStyle=n[2];px.beginPath();px.arc(48+i*96,py(i),R,0,6.283);px.fill();px.shadowBlur=0;px.fillStyle=getComputedStyle(document.body).color;px.font='9px Hanken Grotesk,sans-serif';px.textAlign='center';px.fillText(n[0],48+i*96,py(i)+26)});
+}
+function ppick(e){var r=pc.getBoundingClientRect();pa=Math.max(0,Math.min(4,Math.round(((e.clientX-r.left)*480/r.width-48)/96)));pset();if(still)pdraw()}
+pc.onpointermove=ppick;pc.onclick=ppick;pset();pdraw();
+function fit(c){var r=Math.min(devicePixelRatio||1,2),w=c.clientWidth,h=c.clientHeight;c.width=w*r;c.height=h*r;var x=c.getContext('2d');x.setTransform(r,0,0,r,0,0);return[x,w,h]}
+function live(c,f){var on=0,run=0;function L(){if(!on){run=0;return}f();requestAnimationFrame(L)}new IntersectionObserver(function(e){on=e[0].isIntersecting;if(on&&!run){run=1;L()}}).observe(c)}
+var n2=document.getElementById('n2'),n2k=document.getElementById('n2k'),NX,NW,NH,NS=[],PU=[];
+function n2build(){var f=fit(n2);NX=f[0];NW=f[1];NH=f[2];NS=[];PU=[];var cnt=Math.max(120,Math.round(NW*NH/5200));for(var i=0;i<cnt;i++)NS.push({x:Math.random()*NW,y:Math.random()*NH,a:0,r:0,h:0,n:[]});
+NS.forEach(function(p,i){NS.map(function(q,j){return[j,Math.hypot(p.x-q.x,p.y-q.y)]}).sort(function(a,b){return a[1]-b[1]}).slice(1,5).forEach(function(x){if(p.n.indexOf(x[0])<0)p.n.push(x[0]);if(NS[x[0]].n.indexOf(i)<0)NS[x[0]].n.push(i)})});NX.fillStyle='#02030a';NX.fillRect(0,0,NW,NH)}
+function nfire(i,h){var s=NS[i];if(!s||s.r>0)return;s.a=1;s.r=45;s.h=h;s.n.forEach(function(j){PU.push({a:i,b:j,t:0,h:h,v:.01+Math.random()*.012})})}
+function n2f(){var X=NX,k=+n2k.value;X.globalCompositeOperation='source-over';X.fillStyle='rgba(2,3,10,.22)';X.fillRect(0,0,NW,NH);X.globalCompositeOperation='lighter';
+X.lineWidth=1;X.strokeStyle='rgba(110,130,255,.06)';X.beginPath();NS.forEach(function(p){p.n.forEach(function(j){X.moveTo(p.x,p.y);X.lineTo(NS[j].x,NS[j].y)})});X.stroke();
+if(Math.random()<.04)nfire(Math.floor(Math.random()*NS.length),(performance.now()/20)%360);
+PU=PU.filter(function(u){u.t+=u.v;var A=NS[u.a],B=NS[u.b],x=A.x+(B.x-A.x)*u.t,y=A.y+(B.y-A.y)*u.t,t0=Math.max(0,u.t-.12);X.strokeStyle='hsla('+u.h+',100%,65%,.9)';X.lineWidth=2;X.beginPath();X.moveTo(A.x+(B.x-A.x)*t0,A.y+(B.y-A.y)*t0);X.lineTo(x,y);X.stroke();
+if(u.t>=1){if(Math.random()<k)nfire(u.b,(u.h+18)%360);return false}return true});
+NS.forEach(function(p){if(p.a>.02){var R=8+60*p.a,g=X.createRadialGradient(p.x,p.y,0,p.x,p.y,R);g.addColorStop(0,'hsla('+p.h+',100%,75%,'+p.a+')');g.addColorStop(1,'hsla('+p.h+',100%,50%,0)');X.fillStyle=g;X.beginPath();X.arc(p.x,p.y,R,0,6.283);X.fill();p.a*=.93}if(p.r>0)p.r--;X.fillStyle='rgba(150,170,255,.5)';X.beginPath();X.arc(p.x,p.y,1.6,0,6.283);X.fill()})}
+n2.onpointerdown=n2.onpointermove=function(e){if(e.type=='pointermove'&&!e.buttons)return;var r=n2.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,b=0,bd=1e9;NS.forEach(function(p,i){var d=Math.hypot(p.x-x,p.y-y);if(d<bd){bd=d;b=i}});nfire(b,(performance.now()/10)%360)};
+var s2=document.getElementById('s2'),s2l=document.getElementById('s2l'),s2d=document.getElementById('s2d'),s2w=document.getElementById('s2w'),SX,SW,SH,acc,ax,bins,par=[],bmax=1;
+function s2build(){var f=fit(s2);SX=f[0];SW=f[1];SH=f[2];acc=document.createElement('canvas');acc.width=SW;acc.height=SH;ax=acc.getContext('2d');bins=[];for(var i=0;i<140;i++)bins.push(0);par=[];bmax=1}
+function s2clear(){ax.clearRect(0,0,SW,SH);for(var i=0;i<140;i++)bins[i]=0;bmax=1;par=[]}
+function inten(yy){var lam=+s2l.value*1e-9,d=+s2d.value*1e-6,y=(yy/SH-.5)*.3,b=Math.PI*2e-6*y/lam,e=b?Math.pow(Math.sin(b)/b,2):1;return s2w.checked?e:e*Math.pow(Math.cos(Math.PI*d*y/lam),2)}
+function s2f(){var X=SX,H=SH,col=rgb(+s2l.value),sx=SW*.07,bx=SW*(SW<600?.3:.4),scx=SW*(SW<600?.6:.78),g1=H/2-H*.07,g2=H/2+H*.07;X.globalCompositeOperation='source-over';X.fillStyle='#02030a';X.fillRect(0,0,SW,H);X.globalCompositeOperation='lighter';
+for(var k=0;k<3&&par.length<520;k++){var ty,n=0;do{ty=Math.random()*H;n++}while(Math.random()>inten(ty)&&n<40);par.push({x:sx,ty:ty,sy:Math.random()<.5?g1:g2,v:7+Math.random()*3})}
+var og=X.createRadialGradient(sx,H/2,0,sx,H/2,50);og.addColorStop(0,col);og.addColorStop(1,'rgba(0,0,0,0)');X.fillStyle=og;X.beginPath();X.arc(sx,H/2,50,0,6.283);X.fill();
+X.fillStyle='#232c6b';X.fillRect(bx,0,9,g1-8);X.fillRect(bx,g1+8,9,g2-g1-16);X.fillRect(bx,g2+8,9,H);
+X.strokeStyle=col;X.globalAlpha=.8;X.lineWidth=1.5;X.beginPath();X.moveTo(bx,g1-8);X.lineTo(bx+9,g1-8);X.moveTo(bx,g1+8);X.lineTo(bx+9,g1+8);X.moveTo(bx,g2-8);X.lineTo(bx+9,g2-8);X.moveTo(bx,g2+8);X.lineTo(bx+9,g2+8);X.stroke();X.globalAlpha=1;
+par=par.filter(function(p){var x0=p.x;p.x+=p.v;var y=p.x<bx?H/2+(p.sy-H/2)*(p.x-sx)/(bx-sx):p.sy+(p.ty-p.sy)*(p.x-bx)/(scx-bx);
+if(p.x>=scx){ax.globalCompositeOperation='lighter';ax.fillStyle=col;ax.globalAlpha=.55;ax.beginPath();ax.arc(scx+Math.random()*34,p.ty,1.7,0,6.283);ax.fill();var bi=Math.min(139,Math.floor(p.ty/H*140));bins[bi]++;if(bins[bi]>bmax)bmax=bins[bi];return false}
+X.strokeStyle=col;X.lineWidth=2;X.globalAlpha=.7;X.beginPath();X.moveTo(x0-10,p.x<bx?H/2+(p.sy-H/2)*(x0-10-sx)/(bx-sx):y);X.lineTo(p.x,y);X.stroke();X.globalAlpha=1;X.fillStyle='#fff';X.beginPath();X.arc(p.x,y,2,0,6.283);X.fill();return true});
+X.drawImage(acc,0,0,SW,H);X.fillStyle=col;X.globalAlpha=.22;X.beginPath();X.moveTo(scx+50,0);for(var i=0;i<140;i++)X.lineTo(scx+50+bins[i]/bmax*Math.max(20,SW-scx-60)*.95,(i+.5)/140*H);X.lineTo(scx+50,H);X.fill();X.globalAlpha=1}
+var l2=document.getElementById('l2'),l2m=document.getElementById('l2m'),LX,LW,LH,GAL=[],lx=.5,ly=.5,drag=0,lt=0;
+function l2build(){var f=fit(l2);LX=f[0];LW=f[1];LH=f[2];GAL=[];for(var i=0;i<1100;i++)GAL.push({x:Math.random()*LW,y:Math.random()*LH,r:.8+Math.pow(Math.random(),4)*5,h:Math.random()<.2?30+Math.random()*30:200+Math.random()*80})}
+function l2f(){lt+=.006;var X=LX,cx=drag?lx*LW:LW*(.5+.28*Math.sin(lt*1.3)),cy=drag?ly*LH:LH*(.5+.2*Math.sin(lt*.9+1)),tE=Math.sqrt(+l2m.value)*Math.min(LW,LH)*.045;
+X.globalCompositeOperation='source-over';X.fillStyle='#02030a';X.fillRect(0,0,LW,LH);X.globalCompositeOperation='lighter';
+GAL.forEach(function(g){var dx=g.x-cx,dy=g.y-cy,b=Math.hypot(dx,dy)+.01,A=Math.atan2(dy,dx),q=Math.sqrt(b*b+4*tE*tE);
+[1,-1].forEach(function(s){var t=(b+s*q)/2,st=Math.min(16,Math.abs(t)/b),sr=Math.max(.3,(1+s*b/q)/2);X.fillStyle='hsla('+g.h+',80%,68%,'+Math.min(.8,.7/Math.sqrt(st))+')';X.beginPath();X.ellipse(cx+t*Math.cos(A),cy+t*Math.sin(A),g.r*sr*1.2,g.r*st*1.2,A,0,6.283);X.fill()})});
+var og=X.createRadialGradient(cx,cy,0,cx,cy,tE*.7);og.addColorStop(0,'rgba(255,200,110,.5)');og.addColorStop(1,'rgba(255,180,84,0)');X.fillStyle=og;X.beginPath();X.arc(cx,cy,tE*.7,0,6.283);X.fill()}
+function lmv(e){var r=l2.getBoundingClientRect();lx=(e.clientX-r.left)/r.width;ly=(e.clientY-r.top)/r.height}
+l2.onpointerdown=function(e){drag=1;lmv(e)};l2.onpointermove=function(e){if(e.buttons||e.pointerType=='touch')lmv(e)};
+[s2l,s2d,s2w].forEach(function(e){e.oninput=s2clear});
+function allbuild(){n2build();s2build();l2build()}allbuild();addEventListener('resize',allbuild);live(n2,n2f);live(s2,s2f);live(l2,l2f);
+var p2=document.getElementById('p2'),PX,PW,PH,P2=[],pidle=0;
+function p2build(){var f=fit(p2);PX=f[0];PW=f[1];PH=f[2];P2=[];for(var i=0;i<(PW<600?380:640);i++)P2.push({s:Math.random()*4,v:.002+Math.random()*.005,o:(Math.random()-.5)*Math.min(PW,PH)*.16})}
+function pp2(i){return PW>PH*1.1?[PW*(.09+.82*i/4),PH*(.5+.22*Math.sin(i*1.3))]:[PW*(.5+.26*Math.sin(i*1.3)),PH*(.08+.84*i/4)]}
+function p2f(){var X=PX,R0=Math.min(PW,PH)*.03,t=performance.now()/1000;X.globalCompositeOperation='source-over';X.fillStyle='rgba(7,10,28,.25)';X.fillRect(0,0,PW,PH);X.globalCompositeOperation='lighter';
+P2.forEach(function(q){q.s=(q.s+q.v)%4;var i=Math.floor(q.s),f=q.s-i,A=pp2(i),B=pp2(i+1),dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy)||1,o=q.o*Math.sin(f*3.14159);X.fillStyle=PN[i][2];X.globalAlpha=.8;X.beginPath();X.arc(A[0]+dx*f-dy/L*o,A[1]+dy*f+dx/L*o,1.6,0,6.283);X.fill()});
+PN.forEach(function(n,i){var p=pp2(i),R=R0*(i==pa?1.5:1)*(1+.08*Math.sin(t*2+i)),g=X.createRadialGradient(p[0],p[1],0,p[0],p[1],R*4);g.addColorStop(0,n[2]);g.addColorStop(.25,n[2]);g.addColorStop(1,'rgba(0,0,0,0)');X.globalAlpha=i==pa?.9:.55;X.fillStyle=g;X.beginPath();X.arc(p[0],p[1],R*4,0,6.283);X.fill()});
+X.globalCompositeOperation='source-over';X.globalAlpha=1;X.textAlign='center';X.font='600 '+Math.max(12,Math.min(18,PW*.026))+'px Hanken Grotesk,sans-serif';X.fillStyle='#e9edff';X.strokeStyle='#070a1c';X.lineWidth=4;X.lineJoin='round';PN.forEach(function(n,i){var p=pp2(i),y=p[1]+R0*(i==pa?4.6:3.4);X.strokeText(n[0],p[0],y);X.fillText(n[0],p[0],y)})}
+p2.onpointermove=p2.onpointerdown=function(e){var r=p2.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,b=0,bd=1e9;PN.forEach(function(n,i){var p=pp2(i),d=Math.hypot(p[0]-x,p[1]-y);if(d<bd){bd=d;b=i}});pa=b;pidle=0;pset()};
+setInterval(function(){if(++pidle>3){pa=(pa+1)%5;pset()}},2000);p2build();addEventListener('resize',p2build);live(p2,p2f);
+var NV=[['Idea','One question'],['Index','The index'],['Test','The test'],['Storm','#stages'],['Lab','The science lab'],['Read','Read the manuscript'],['Claims','Honest by']],nv=document.createElement('div');nv.id='nav';
+NV.forEach(function(n){var b=document.createElement('button');b.textContent=n[0];b.onclick=function(){var t=n[1][0]=='#'?document.querySelector(n[1]):[].find.call(document.querySelectorAll('h2'),function(h){return h.textContent.indexOf(n[1])>=0});if(t)t.scrollIntoView({behavior:still?'auto':'smooth',block:'start'})};nv.appendChild(b)});document.body.appendChild(nv);
+var h1=document.getElementById('h1'),HX,HW,HH,hn=3,hto=0,ha=0,hph=[],hln=[];
+function h1build(){var f=fit(h1);HX=f[0];HW=f[1];HH=f[2]}
+function hR(n){return Math.min(HW,HH*1.05)*.46*Math.pow(n/6,1.5)}
+function hcol(w){return w<380?'#b9a7ff':w>750?'#ff8a6b':rgb(w)}
+function hgo(m){if(m==hn||hto)return;var E=13.606*(1/Math.pow(Math.min(hn,m),2)-1/Math.pow(Math.max(hn,m),2)),w=1239.84/E;hto={from:hn,to:m,t:0,w:w,up:m>hn};document.getElementById('h1t').textContent=(m>hn?'Absorbs':'Emits')+' a photon, n='+hn+' to '+m+': '+E.toFixed(2)+' eV, '+w.toFixed(0)+' nm ('+(w>=380&&w<=750?'visible':w<380?'ultraviolet':'infrared')+').'}
+function h1f(){var X=HX,W=HW,H=HH,cx=W/2,cy=H*.46,n=hn,rr=hR(hn);X.globalCompositeOperation='source-over';X.fillStyle='#02030a';X.fillRect(0,0,W,H);
+if(hto){hto.t+=1/80;var s=Math.min(1,Math.max(0,(hto.t-.3)/.5)),u=s*s*(3-2*s);n=hto.from;rr=hR(hto.from)+(hR(hto.to)-hR(hto.from))*u}
+ha+=.05/Math.pow(n,1.2);var ex=cx+rr*Math.cos(ha),ey=cy+rr*Math.sin(ha);
+for(var k=1;k<=6;k++){X.strokeStyle=k==hn?'rgba(160,180,255,.7)':'rgba(120,140,255,.22)';X.lineWidth=k==hn?1.6:1;X.beginPath();X.arc(cx,cy,hR(k),0,6.283);X.stroke();X.fillStyle='#7f88b8';X.font='11px Hanken Grotesk,sans-serif';X.fillText('n='+k,cx+hR(k)*.71+4,cy-hR(k)*.71-4)}
+if(hto){if(hto.up&&hto.t<.35){var q=hto.t/.35,ix=ex*q,iy=(cy-H*.3)+(ey-(cy-H*.3))*q;X.globalCompositeOperation='lighter';X.strokeStyle=hcol(hto.w);X.lineWidth=3;X.beginPath();X.moveTo(ix-(ex*.12),iy-((ey-(cy-H*.3))*.12));X.lineTo(ix,iy);X.stroke()}
+if(!hto.up&&!hto.fired&&hto.t>=.5){hto.fired=1;hph.push({x:ex,y:ey,age:0,w:hto.w})}
+if(hto.t>=1){hn=hto.to;if(!hto.up){var key=Math.round(hto.w);if(!hln.some(function(v){return Math.round(v)==key}))hln.push(hto.w)}hto=0}}
+X.globalCompositeOperation='lighter';var ng=X.createRadialGradient(cx,cy,0,cx,cy,26);ng.addColorStop(0,'rgba(255,190,110,.95)');ng.addColorStop(1,'rgba(255,150,60,0)');X.fillStyle=ng;X.beginPath();X.arc(cx,cy,26,0,6.283);X.fill();
+var eg=X.createRadialGradient(ex,ey,0,ex,ey,18);eg.addColorStop(0,'rgba(140,240,255,1)');eg.addColorStop(1,'rgba(90,200,255,0)');X.fillStyle=eg;X.beginPath();X.arc(ex,ey,18,0,6.283);X.fill();
+hph=hph.filter(function(p){p.age++;var a=Math.atan2(p.y-cy,p.x-cx),al=Math.max(0,1-p.age/110);X.strokeStyle=hcol(p.w);X.globalAlpha=al;X.lineWidth=2;X.beginPath();X.arc(p.x,p.y,p.age*3.2,0,6.283);X.stroke();X.fillStyle='#fff';X.beginPath();X.arc(p.x+Math.cos(a)*p.age*5,p.y+Math.sin(a)*p.age*5,3,0,6.283);X.fill();X.globalAlpha=1;return p.age<110});
+for(var i=0;i<W;i+=3){X.fillStyle=rgb(380+370*i/W);X.globalAlpha=.16;X.fillRect(i,16,3,10)}X.globalAlpha=1;hln.forEach(function(w){var x=(Math.min(750,Math.max(380,w))-380)/370*(W-6)+3;X.fillStyle=hcol(w);X.fillRect(x-1,12,3,18)});X.globalCompositeOperation='source-over';X.fillStyle='#7f88b8';X.font='11px Hanken Grotesk,sans-serif';X.fillText('emission spectrum',6,44)}
+h1.onpointerdown=function(e){var r=h1.getBoundingClientRect(),d=Math.hypot(e.clientX-r.left-HW/2,e.clientY-r.top-HH*.46),b=1,bd=1e9;for(var n=1;n<=6;n++){var q=Math.abs(d-hR(n));if(q<bd){bd=q;b=n}}hgo(b)};
+document.getElementById('h1c').onclick=function(){hln=[]};
+var b2=document.getElementById('b2'),BX,BW,BH,bn,bs,bph=[],fA=null,fB=null,BI=['bqa','bqb','bqc','bqd'].map(function(k){return document.getElementById(k)});
+function bres(){bn=[0,0,0,0];bs=[0,0,0,0];bph=[]}
+function b2build(){var f=fit(b2);BX=f[0];BW=f[1];BH=f[2];bres()}
+function btr(){var i=Math.random()<.5?0:1,j=Math.random()<.5?0:1,E=-Math.cos((+BI[i].value-BI[2+j].value)*Math.PI/180),a=Math.random()<.5?1:-1,b=Math.random()<(1+E)/2?a:-a,k=i*2+j;bn[k]++;bs[k]+=a*b;return[a,b]}
+function b2f(){var X=BX,W=BW,H=BH,cx=W/2,cy=H*.52,dx=W*.34,R=Math.min(W,H)*.075,sv=0;X.globalCompositeOperation='source-over';X.fillStyle='rgba(2,3,10,.28)';X.fillRect(0,0,W,H);for(var k=0;k<14;k++)btr();
+if(Math.random()<.2){var r=btr();bph.push({t:0,a:r[0],b:r[1]})}
+X.globalCompositeOperation='lighter';var sg=X.createRadialGradient(cx,cy,0,cx,cy,50);sg.addColorStop(0,'rgba(190,170,255,.9)');sg.addColorStop(1,'rgba(120,90,255,0)');X.fillStyle=sg;X.beginPath();X.arc(cx,cy,50,0,6.283);X.fill();
+bph=bph.filter(function(p){p.t+=.03;var o=dx*p.t,w=Math.sin(p.t*9)*6;X.strokeStyle='rgba(180,160,255,.25)';X.lineWidth=1;X.beginPath();X.moveTo(cx-o,cy+w);X.lineTo(cx+o,cy-w);X.stroke();X.fillStyle='#fff';X.beginPath();X.arc(cx-o,cy+w,2.6,0,6.283);X.arc(cx+o,cy-w,2.6,0,6.283);X.fill();if(p.t>=1){fA={c:p.a,g:1};fB={c:p.b,g:1};return false}return true});
+[[cx-dx,fA,0],[cx+dx,fB,2]].forEach(function(d){X.strokeStyle='rgba(150,170,255,.55)';X.lineWidth=2;X.beginPath();X.arc(d[0],cy,R,0,6.283);X.stroke();if(d[1]&&d[1].g>.02){X.fillStyle=d[1].c>0?'rgba(143,209,106,'+d[1].g+')':'rgba(255,122,168,'+d[1].g+')';X.beginPath();X.arc(d[0],cy,R,0,6.283);X.fill();d[1].g*=.9}
+[0,1].forEach(function(s){var a=+BI[d[2]+s].value*Math.PI/180;X.strokeStyle=s?'#ffb454':'#7fe3d4';X.lineWidth=2;X.beginPath();X.moveTo(d[0]-Math.sin(a)*R,cy-Math.cos(a)*R);X.lineTo(d[0]+Math.sin(a)*R,cy+Math.cos(a)*R);X.stroke()})});
+if(bn.every(function(v){return v>0}))sv=Math.abs(bs[0]/bn[0]-bs[1]/bn[1]+bs[2]/bn[2]+bs[3]/bn[3]);
+X.globalCompositeOperation='source-over';X.fillStyle='#02030a';X.fillRect(0,0,W,H*.3);var bx=W*.12,bw=W*.76;X.fillStyle='#252c52';X.fillRect(bx,H*.2,bw,8);X.fillStyle=sv>2?'#ffb454':'#7fe3d4';X.fillRect(bx,H*.2,bw*Math.min(1,sv/3),8);X.fillStyle='#fff';X.fillRect(bx+bw*2/3-1,H*.2-5,2,18);X.fillRect(bx+bw*2.83/3-1,H*.2-5,2,18);
+X.textAlign='center';X.font='300 '+Math.min(W*.11,60)+'px Fraunces,Georgia,serif';X.fillText('S = '+sv.toFixed(2),cx,H*.15);X.font='11px Hanken Grotesk,sans-serif';X.fillStyle='#9aa3c7';X.fillText('classical limit 2',bx+bw*2/3,H*.2+30);X.fillText('quantum 2.83',Math.min(W-40,bx+bw*2.83/3),H*.2+43);X.textAlign='left'}
+BI.forEach(function(e){e.oninput=bres});
+var e2=document.getElementById('e2'),EX,EW,EH,EP=[],eo=7,eg=0,efr=0,em=document.getElementById('e2m');
+function e2build(){var f=fit(e2);EX=f[0];EW=f[1];EH=f[2];EP=[];eg=0;for(var i=0;i<170;i++){var t=Math.min(10,Math.max(0,2.5+rnd()));EP.push({t:t,s:t,u:1,x:t})}}
+function estep(){var w=EP.map(function(b){return Math.exp(-Math.pow(b.t-eo,2)/3)}),T=w.reduce(function(a,c){return a+c},0),n=[],m=+em.value,mean=0;
+for(var i=0;i<170;i++){var r=Math.random()*T,k=0;while(k<169&&r>w[k]){r-=w[k];k++}var p=EP[k],t=Math.min(10,Math.max(0,p.t+rnd()*m));mean+=t;n.push({s:p.x,t:t,u:0,x:p.x})}EP=n;eg++;document.getElementById('e2t').textContent='Generation '+eg+'. Average beak '+(mean/170).toFixed(1)+', best fit '+eo.toFixed(1)+'. Drag the gold hill to change the food.'}
+function e2f(){var X=EX,W=EW,H=EH,base=H*.8,r=Math.max(2.4,W/200),cnt={};X.globalCompositeOperation='source-over';X.fillStyle='#02030a';X.fillRect(0,0,W,H);if(++efr%50==0)estep();
+var g=X.createLinearGradient(0,base-H*.5,0,base);g.addColorStop(0,'rgba(255,180,84,.5)');g.addColorStop(1,'rgba(255,180,84,0)');X.fillStyle=g;X.beginPath();X.moveTo(0,base);for(var x=0;x<=W;x+=4)X.lineTo(x,base-Math.exp(-Math.pow(x/W*10-eo,2)/3)*H*.5);X.lineTo(W,base);X.fill();
+X.globalCompositeOperation='lighter';EP.forEach(function(b){b.u=Math.min(1,b.u+.04);var e=b.u*b.u*(3-2*b.u);b.x=b.s+(b.t-b.s)*e});
+EP.slice().sort(function(a,b){return a.x-b.x}).forEach(function(b){var bin=Math.floor(b.x*6);cnt[bin]=(cnt[bin]||0)+1;X.fillStyle='hsl('+(210-b.x*17)+',85%,62%)';X.beginPath();X.arc(b.x/10*W,base-cnt[bin]*r*1.9,r,0,6.283);X.fill()});
+X.globalCompositeOperation='source-over';X.fillStyle='#7f88b8';X.font='11px Hanken Grotesk,sans-serif';X.fillText('small beak',6,base+18);X.textAlign='right';X.fillText('large beak',W-6,base+18);X.textAlign='left'}
+e2.onpointerdown=e2.onpointermove=function(e){if(e.type=='pointermove'&&!e.buttons&&e.pointerType!='touch')return;var r=e2.getBoundingClientRect();eo=Math.max(0,Math.min(10,(e.clientX-r.left)/r.width*10))};document.getElementById('e2r').onclick=e2build;
+function more(){h1build();b2build();e2build()}more();addEventListener('resize',more);live(h1,h1f);live(b2,b2f);live(e2,e2f);
+var gd=document.getElementById('gd');gd.oninput=function(){document.getElementById('gdv').textContent=gd.value;document.getElementById('ge').textContent=(gd.value*11.54).toFixed(1)+' km off'};gd.oninput();
+function rgb(w){var R=0,G=0,B=0;if(w<440){R=(440-w)/60;B=1}else if(w<490){G=(w-440)/50;B=1}else if(w<510){G=1;B=(510-w)/20}else if(w<580){R=(w-510)/70;G=1}else if(w<645){R=1;G=(645-w)/65}else R=1;return 'rgb('+[R,G,B].map(function(v){return Math.round(255*v)}).join()+')'}
+var hu=document.getElementById('hu'),hl=document.getElementById('hl');
+function hyd(){var u=+hu.value,l=+hl.value,o=document.getElementById('hout'),s='',Y=function(n){return 175-(1-1/(n*n))*150};
+for(var n=1;n<=6;n++)s+='<line x1="40" x2="260" y1="'+Y(n)+'" y2="'+Y(n)+'" stroke="currentColor" stroke-opacity=".5"/><text x="8" y="'+(Y(n)+4)+'" font-size="11" fill="currentColor">n='+n+'</text>';
+if(u<=l){o.textContent='Choose a higher starting level than the ending level.';document.getElementById('hsv').innerHTML=s;return}
+var E=13.606*(1/(l*l)-1/(u*u)),w=1239.84/E,vis=w>=380&&w<=750,c=vis?rgb(w):'#aaa';
+s+='<line x1="150" x2="150" y1="'+Y(u)+'" y2="'+(Y(l)-6)+'" stroke="'+c+'" stroke-width="3"/><polygon points="144,'+(Y(l)-8)+' 156,'+(Y(l)-8)+' 150,'+Y(l)+'" fill="'+c+'"/><path d="M156 '+((Y(u)+Y(l))/2)+' q10 -8 20 0 t20 0 t20 0" fill="none" stroke="'+c+'" stroke-width="2"/>';
+document.getElementById('hsv').innerHTML=s;
+o.textContent='Photon: '+E.toFixed(2)+' eV, '+w.toFixed(0)+' nm. '+(vis?'Visible light.':w<380?'Ultraviolet (Lyman series).':'Infrared.')+' Series: '+['','Lyman','Balmer','Paschen','Brackett','Pfund'][l]+'.'}
+hu.onchange=hl.onchange=hyd;hyd();
+var sl=document.getElementById('sl'),sd=document.getElementById('sd'),wc=document.getElementById('wc'),ds=document.getElementById('ds'),dx=ds.getContext('2d');dx.scale(2,2);
+function slit(){var lam=+sl.value*1e-9,d=+sd.value*1e-6,a=2e-6,w=480,h=170,col=rgb(+sl.value),P=[];
+document.getElementById('slv').textContent=sl.value+' nm';document.getElementById('sdv').textContent=sd.value+' µm';
+dx.clearRect(0,0,w,h);for(var i=0;i<w;i++){var y=(i/w-.5)*.3,b=Math.PI*a*y/lam,e=b?Math.pow(Math.sin(b)/b,2):1;P.push(wc.checked?e:e*Math.pow(Math.cos(Math.PI*d*y/lam),2))}
+P.forEach(function(I,i){dx.globalAlpha=I;dx.fillStyle=col;dx.fillRect(i,0,1,45)});dx.globalAlpha=1;dx.strokeStyle=col;dx.lineWidth=2;dx.beginPath();
+P.forEach(function(I,i){dx[i?'lineTo':'moveTo'](i,h-8-I*(h-65))});dx.stroke()}
+[sl,sd,wc].forEach(function(e){e.oninput=slit});slit();
+var Q=['qa','qb','qc','qd'].map(function(k){return document.getElementById(k)});
+function bell(){var v=Q.map(function(e,i){document.getElementById(e.id+'v').textContent=e.value+'°';return +e.value*Math.PI/180}),E=function(p,q){return -Math.cos(p-q)},
+S=Math.abs(E(v[0],v[2])-E(v[0],v[3])+E(v[1],v[2])+E(v[1],v[3]));
+document.getElementById('sv').textContent='S = '+S.toFixed(2);document.getElementById('sf').style.width=Math.min(S/3,1)*100+'%';
+document.getElementById('sn').textContent=S>2.001?'Above 2: no local hidden-variable model reproduces this. No signal is sent between the photons.':'At or below 2: a classical local model could explain this. Try 0°, 90°, 45°, 135°.'}
+Q.forEach(function(e){e.oninput=bell});bell();
+})();
+</script>
+</body>
+</html>
